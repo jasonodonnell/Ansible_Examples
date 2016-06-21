@@ -2,14 +2,36 @@
 - hosts: all
   sudo: yes
   vars:
-    app_name: party_parrot
+    app_name: app 
     webapps_dir: /opt/webapps
-    virtualenv_root: /opt/webapps/pyenv/versions/latest_v3
+   
+  handlers:
+    - name: reload supervisor config
+      command: supervisorctl reload && supervisorctl update
+
   tasks:
     - name: Update Server
       yum: 
         name=*
         state=latest
+    
+    - name: Install Python, Pip and Supervisor
+      yum: state=present name={{ item }}
+      with_items:
+      - python
+      - python-pip
+      - supervisor
+
+    - name: Install supervisor configuration
+      template: >
+        src=templates/flask_supervisor.conf
+        dest=/etc/supervisord.d/flask_supervisor.ini
+      notify: reload supervisor config
+
+    - name: Start Supervisor
+      service: 
+        name=supervisord
+        state=restarted
 
     - name: Create Webapp Dir
       file:
@@ -21,19 +43,15 @@
       copy: 
         src=app
         dest={{ webapps_dir }}/{{ app_name }}
-      notify:
-        - restart app
-
-    - name: Install Python and Pip 
-      yum: state=present name={{ item }}
-      with_items:
-      - python
-      - python-pip
+        owner=vagrant
+        group=vagrant
+        mode=0755
 
     - name: Install Pip Requirements
       pip: 
         requirements={{ webapps_dir }}/{{ app_name }}/app/requirements.txt 
-
+    
     - name: Start Flask App
-      shell: 
-        "python {{ webapps_dir }}/{{ app_name }}/app/party_parrot &"
+      supervisorctl: 
+        name=app 
+        state=restarted
