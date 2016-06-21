@@ -44,7 +44,7 @@ Next, add the public key to authorized_keys for the user `bob`:
 ```bash
 $ ansible --inventory=inventory.yml app --sudo \
     --module-name=authorized_key \
-    --args="user=bob key="{{ lookup('file', './ansible.pub') }}"
+    --args="user=bob key={{ lookup('file', './ansible.pub') }}"
 ```
 
 Verify SSH works:
