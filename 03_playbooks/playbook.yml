@@ -1,0 +1,39 @@
+---
+- hosts: all
+  sudo: yes
+  vars:
+    app_name: party_parrot
+    webapps_dir: /opt/webapps
+    virtualenv_root: /opt/webapps/pyenv/versions/latest_v3
+  tasks:
+    - name: Update Server
+      yum: 
+        name=*
+        state=latest
+
+    - name: Create Webapp Dir
+      file:
+        path={{ webapps_dir }}
+        state=directory
+        mode=0755
+
+    - name: Get Flask App
+      copy: 
+        src=app
+        dest={{ webapps_dir }}/{{ app_name }}
+      notify:
+        - restart app
+
+    - name: Install Python and Pip 
+      yum: state=present name={{ item }}
+      with_items:
+      - python
+      - python-pip
+
+    - name: Install Pip Requirements
+      pip: 
+        requirements={{ webapps_dir }}/{{ app_name }}/app/requirements.txt 
+
+    - name: Start Flask App
+      shell: 
+        "python {{ webapps_dir }}/{{ app_name }}/app/party_parrot &"

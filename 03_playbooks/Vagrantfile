@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.ssh.insert_key = false
+    config.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", "256"]
+    end
+
+    # APPLICATION SERVER 1
+    config.vm.define "flaskapp" do |app|
+        app.vm.hostname = "flaskappdev"
+        app.vm.box = "geerlingguy/centos7"
+        app.vm.network :private_network, ip: "192.168.70.4"
+    end 
+end
