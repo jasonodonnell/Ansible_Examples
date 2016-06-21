@@ -50,5 +50,5 @@ $ ansible --inventory=inventory.yml app --sudo \
 Verify SSH works:
 
 ```bash
-$ ssh -i ~/keys/ansible bob@192.168.60.5
+$ ssh -i ./ansible bob@192.168.60.5
 ```
