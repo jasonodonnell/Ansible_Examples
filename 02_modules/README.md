@@ -36,7 +36,7 @@ First create an SSH key:
 
 ```bash
 $ ssh-keygen -t rsa -b 4096 -C "test@localhost"
-Enter file in which to save the key (~/.ssh/id_rsa): ~/Keys/ansible
+Enter file in which to save the key (~/.ssh/id_rsa): ./ansible
 ```
 
 Next, add the public key to authorized_keys for the user `bob`:
@@ -44,7 +44,7 @@ Next, add the public key to authorized_keys for the user `bob`:
 ```bash
 $ ansible --inventory=inventory.yml app --sudo \
     --module-name=authorized_key \
-    --args="user=bob key="{{ lookup('file', '~/keys/ansible.pub') }}"
+    --args="user=bob key="{{ lookup('file', './ansible.pub') }}"
 ```
 
 Verify SSH works:
