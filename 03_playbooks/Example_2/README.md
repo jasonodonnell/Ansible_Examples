@@ -3,7 +3,7 @@
 ## Server Build
 
 ```bash
-$ ansible-playbook --inventory=inventory.yml postgres.yml --extra-vars="host=192.168.60.4 user=vagrant"
+$ ansible-playbook --inventory=inventory.yml postgres.yml --extra-vars="host=192.168.80.4 user=vagrant"
 ```
 
 ## Create Role
