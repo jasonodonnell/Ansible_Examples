@@ -1,0 +1,4 @@
+pgsql_version: "9.5"
+postgres_version: 95
+postgres_rpm: "https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-2.noarch.rpm"
+

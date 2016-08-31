@@ -1,0 +1,12 @@
+---
+- name: Install VIM and Git 
+  hosts: '{{ host }}'
+  user: '{{ user }}'
+  sudo: yes 
+  tasks:
+    - name: "Install VIM and Git"
+      yum: state=present name={{ item }}
+      with_items:
+      - vim 
+      - git 
+      - gcc

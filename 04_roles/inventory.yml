@@ -1,5 +1,5 @@
 [lamp]
-192.168.80.4
+192.168.90.4
 
 [lamp:vars]
 ansible_ssh_user=vagrant

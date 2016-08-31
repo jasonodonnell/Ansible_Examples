@@ -1,0 +1,8 @@
+---
+- name: Update Server 
+  hosts: '{{ host }}'
+  user: '{{ user }}'
+  sudo: yes 
+  tasks:
+    - name: Update server packages
+      yum: name=* state=latest

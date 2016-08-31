@@ -1,0 +1,11 @@
+---
+- name: Create PGSQL 9.5 Server 
+  hosts: '{{ host }}'
+  user: '{{ user }}'
+  sudo: yes
+  pre_tasks:
+    - include_vars: PGSQL_vars/postgresql_vars.yml
+- include: ./tasks/update.yml 
+- include: ./tasks/dev_packages.yml
+- include: ./tasks/postgresql.yml 
+- include: ./tasks/pgaudit.yml 

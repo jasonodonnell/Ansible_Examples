@@ -1,0 +1,50 @@
+---
+- name: Install PostgreSQL 
+  hosts: '{{ host }}'
+  user: '{{ user }}'
+  sudo: yes 
+  tasks:
+    - name: "Install PostgreSQL Dependencies"
+      yum: state=present name={{ item }}
+      with_items:
+      - bison
+      - flex
+      - gcc 
+      - readline-devel
+      - zlib-devel
+      - perl-devel
+      - perl-ExtUtils-Embed
+      - openssl-devel
+      - pam-devel
+      - libxml2-devel
+      - libxslt-devel
+      - libuuid-devel
+      - openldap-devel
+      - tcl-devel
+      - python-devel
+      - python-psycopg2
+    
+    - name: "Install PostgreSQL Remote Repo"
+      yum: state=present name="{{ postgres_rpm }}"
+
+    - name: "Install PostgreSQL {{ pgsql_version }}"
+      yum: state=present name={{ item }}
+      with_items:
+      - postgresql{{ postgres_version }}
+      - postgresql{{ postgres_version }}-server
+      - postgresql{{ postgres_version }}-contrib
+      - postgresql{{ postgres_version }}-devel
+      - postgresql{{ postgres_version }}-libs
+
+    - name: "Export pgsql PATH"
+      shell: "export PATH=/usr/pgsql-$PGVERSION$/bin:$PATH"
+      sudo: no
+
+    - name: "Initialize PostgreSQL Server"
+      command: /usr/pgsql-{{ pgsql_version }}/bin/postgresql{{ postgres_version }}-setup initdb
+
+    - name: "Enable PostgreSQL Service"
+      command: "systemctl enable postgresql-{{ pgsql_version }}"
+    
+    - name: "Start PostgreSQL Service"
+      command: "systemctl start postgresql-{{ pgsql_version }}"

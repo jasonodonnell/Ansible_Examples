@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.ssh.insert_key = false
+    config.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", "256"]
+    end
+
+    # DB SERVER 1
+    config.vm.define "db" do |db|
+        db.vm.hostname = "pgsql95"
+        db.vm.box = "geerlingguy/centos7"
+        db.vm.network :private_network, ip: "192.168.80.4"
+        db.vm.provision :ansible do |ansible|
+            ansible.playbook = "./postgres.yml"
+            ansible.limit = "db"
+            ansible.inventory_path = "./inventory.yml"
+            ansible.extra_vars = {
+              host: "192.168.80.4",
+              user: "vagrant"
+            }
+        end
+    end
+end

@@ -13,6 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "lamp" do |app|
         app.vm.hostname = "lamp"
         app.vm.box = "geerlingguy/centos7"
-        app.vm.network :private_network, ip: "192.168.80.4"
-    end 
+        app.vm.network :private_network, ip: "192.168.90.4"
+    end
+    
+    config.vm.provision "shell", inline: <<-SHELL
+        sudo yum -y update
+    SHELL 
 end

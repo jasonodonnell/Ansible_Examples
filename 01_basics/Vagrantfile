@@ -29,4 +29,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         app.vm.box = "geerlingguy/centos7"
         app.vm.network :private_network, ip: "192.168.60.6"
     end 
+
+    config.vm.provision "shell", inline: <<-SHELL
+        sudo yum -y update
+    SHELL
 end
